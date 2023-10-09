@@ -7,8 +7,11 @@ const hoursEl = document.getElementById('hours');
 const minsEl = document.getElementById('mins');
 const secsEl = document.getElementById('secs');
 
-const intervalID = setInterval(() => {
+updateTimers();
+
+function updateTimers() {
   const now = new Date();
+
   // Time difference
   const MS = launchDate - now;
   const secs = Math.floor(MS / 1000) % 60;
@@ -21,10 +24,11 @@ const intervalID = setInterval(() => {
   updateTimer(minsEl, mins);
   updateTimer(secsEl, secs);
 
-  if (days == 0 && hours == 0 && mins == 0 && secs == 0) {
-    clearInterval(intervalID);
+  if (days || hours || mins || secs) {
+    const tilNext = 1000 - (new Date().getTime() % 1000);
+    setTimeout(updateTimers, tilNext);
   }
-}, 1000);
+}
 
 function updateTimer(timerEl, value) {
   const nowEls = timerEl.querySelectorAll('.timer-now');
