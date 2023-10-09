@@ -1,0 +1,250 @@
+@import url('https://fonts.googleapis.com/css2?family=Red+Hat+Text:wght@700&display=swap');
+
+:root {
+  --gray-blue: hsl(237, 18%, 59%);
+  --soft-red: hsl(345, 95%, 68%);
+  --white: hsl(0, 0%, 100%);
+  --dark-blue: hsl(236, 21%, 26%);
+  --darker-blue: hsl(235, 16%, 14%);
+  --darkest-blue: hsl(234, 17%, 12%);
+}
+
+body {
+  width: 100vw;
+  height: 100vh;
+  overflow: clip;
+  margin: 0;
+  background-color: var(--darker-blue);
+  background-image: url('images/bg-stars.svg');
+  font-size: 14px;
+  font-family: 'Red Hat Text';
+  font-weight: 700;
+  text-align: center;
+  text-transform: uppercase;
+  color: var(--gray-blue);
+}
+
+h1 {
+  margin: 18vh 20px 0;
+  font-size: 18px;
+  letter-spacing: .4em;
+  color: var(--white);
+}
+
+.timer-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  max-width: 700px;
+  /* gap: 28px; */
+  margin: 80px auto 0;
+
+  >div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    >span {
+      --letter-spacing: .25em;
+      margin-top: 16px;
+      padding-left: var(--letter-spacing);
+      font-size: 8px;
+      letter-spacing: var(--letter-spacing);
+      color: var(--gray-blue);
+    }
+  }
+}
+
+.timer {
+  /* It takes twice as much for the whole flip transition */
+  --flip-duration: 0.25s;
+  --width: min(148px, 20vw);
+  --height: calc(var(--width) * 0.95);
+  --circle-size: calc(var(--width) / 12);
+
+  perspective: 300px;
+  position: relative;
+  width: var(--width);
+  height: var(--height);
+  display: flex;
+  flex-direction: column;
+  font-size: calc(var(--width) / 2);
+  color: var(--soft-red);
+
+  /* Shadow */
+  &::before {
+    content: '';
+    position: absolute;
+    bottom: calc(var(--circle-size)*-1);
+    z-index: -10;
+    width: 100%;
+    height: 50%;
+    border-radius: var(--circle-size);
+    background-color: var(--darkest-blue);
+  }
+
+  /* Line in the middle */
+  &::after {
+    --size: 1px;
+    content: '';
+    position: absolute;
+    top: calc(50% - var(--size) / 2);
+    left: calc(var(--circle-size) / 2);
+    z-index: 30;
+    width: calc(100% - var(--circle-size));
+    height: var(--size);
+    backdrop-filter: brightness(.75);
+  }
+
+  >span {
+    position: absolute;
+    width: 100%;
+    height: calc(var(--height) / 2);
+    overflow: hidden;
+    background-color: var(--dark-blue);
+
+    &::before,
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: calc(var(--circle-size) / -2);
+      z-index: 1;
+      width: var(--circle-size);
+      height: var(--circle-size);
+      border-radius: 99px;
+      background-color: var(--darkest-blue);
+    }
+
+    &::before {
+      left: calc(var(--circle-size) / -2);
+    }
+
+    &::after {
+      right: calc(var(--circle-size) / -2);
+    }
+
+    &:nth-child(odd) {
+      filter: brightness(.85);
+      border-radius: 8px 8px 0 0;
+      line-height: var(--height);
+    }
+
+    &:nth-child(even) {
+      top: calc(var(--height) / 2);
+      border-radius: 0 0 8px 8px;
+
+      &::before,
+      &::after {
+        top: calc(var(--circle-size) / -2);
+      }
+
+      >span {
+        position: absolute;
+        top: calc(var(--height) / -2);
+        left: 0;
+        width: 100%;
+        height: var(--height);
+        background-color: var(--dark-blue);
+        line-height: var(--height);
+      }
+    }
+
+    &:nth-child(2),
+    &:nth-child(3) {
+      z-index: 10;
+    }
+  }
+
+  >span:nth-child(2) {
+    transform-origin: top;
+    transform: rotate3d(1, 0, 0, 90deg);
+
+    .flip & {
+      transition: var(--flip-duration) transform ease-out;
+      transition-delay: var(--flip-duration);
+      transform: rotate3d(1, 0, 0, 0deg);
+    }
+  }
+
+  &.flip>span:nth-child(3) {
+    transition: var(--flip-duration) transform ease-in;
+    transform: rotate3d(1, 0, 0, -90deg);
+    transform-origin: bottom;
+  }
+}
+
+.links {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 16%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 28px;
+
+  & path {
+    fill: var(--gray-blue);
+  }
+
+  >a:hover path {
+    fill: var(--soft-red);
+  }
+}
+
+.bg-hills {
+  position: absolute;
+  bottom: 0;
+  z-index: -100;
+  width: 100vw;
+  height: 25%;
+  background-image: url('images/pattern-hills.svg');
+  background-position: right;
+  background-size: cover;
+}
+
+.attribution {
+  position: absolute;
+  bottom: 4px;
+  width: 100vw;
+  opacity: .5;
+  font-size: 8px;
+  color: var(--gray-blue);
+
+  >a {
+    text-decoration: none;
+    color: skyblue;
+
+    &:hover {
+      color: var(--soft-red);
+    }
+  }
+}
+
+@media (width >=550px) {
+  h1 {
+    font-size: 20px;
+  }
+
+  .timer-container {
+    margin-top: 96px;
+    padding: 0 24px;
+
+    >div>span {
+      --letter-spacing: .4em;
+      margin-top: 20px;
+      font-size: 10px;
+    }
+  }
+
+  .timer {
+    --width: min(148px, 18vw);
+  }
+}
+
+@media (width >=650px) {
+  .timer-container>div>span {
+    font-size: 12px;
+  }
+}
